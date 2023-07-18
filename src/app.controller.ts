@@ -1,36 +1,32 @@
 import { Controller, Get, Post, Put, Delete, Param } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Report } from './data';
 
-@Controller('report/income')
+@Controller('report/:type')
 export class AppController {
-  // constructor(private readonly appService: AppService) {}
-
-  // @Get()
-  // getHello(): string {
-  //   return this.appService.getHello();
-  // }
+  constructor(private readonly appService: AppService) {}
 
   @Get()
-  getAllReports() {
-    return [];
+  getAllReports(@Param('type') type: string): Report[] {
+    return this.appService.getAllReports(type);
   }
 
-  @Get(":id")
-  getReportById() {
-    return {};
+  @Get(':id')
+  getReportById(@Param('id') id: string, @Param('type') type: string) {
+    return this.appService.getReportById(id, type);
   }
 
   @Post()
   createReport() {
-    return "New product was created!";
+    return 'New product was created!';
   }
 
-  @Put(":id")
+  @Put(':id')
   updateReportById(@Param() params: any): string {
-    return `Product with id: ${params.id} was updated!`
+    return `Product with id: ${params.id} was updated!`;
   }
 
-  @Delete(":id")
+  @Delete(':id')
   deleteReportById(@Param() params: any): string {
     return `Product with id: ${params.id} was deleted!`;
   }
