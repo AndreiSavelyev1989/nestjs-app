@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Report } from './data';
 
@@ -17,8 +25,8 @@ export class AppController {
   }
 
   @Post()
-  createReport() {
-    return 'New product was created!';
+  createReport(@Body() body: { source: string; amount: number }, @Param('type') type: string) {
+    return this.appService.createReport(body, type);
   }
 
   @Put(':id')
