@@ -30,8 +30,8 @@ export class AppController {
   }
 
   @Put(':id')
-  updateReportById(@Param() params: any): string {
-    return `Product with id: ${params.id} was updated!`;
+  updateReportById(@Body() body: any, @Param('id') id: string, @Param('type') type: string) {
+    return this.appService.updateReportById(id, body, type);
   }
 
   @Delete(':id')

@@ -32,4 +32,19 @@ export class AppService {
       return err;
     }
   }
+
+  updateReportById(id: string, body: any, type: string) {
+    try {
+      const updatedReports = data.reports.map((report) =>
+        report.id === id && report.type === type
+          ? { ...report, ...body }
+          : report,
+      )
+      data.reports = [...updatedReports];
+      const updatedReport = updatedReports.find(report => report.id === id && report.type === type);
+      return updatedReport;
+    } catch (err) {
+      return err;
+    }
+  }
 }
