@@ -39,12 +39,33 @@ export class AppService {
         report.id === id && report.type === type
           ? { ...report, ...body }
           : report,
-      )
+      );
       data.reports = [...updatedReports];
-      const updatedReport = updatedReports.find(report => report.id === id && report.type === type);
+      const updatedReport = updatedReports.find(
+        (report) => report.id === id && report.type === type,
+      );
+
+      if (!updatedReport) {
+        throw new Error(`The report with id: ${id} doesn't exist`);
+      }
       return updatedReport;
     } catch (err) {
-      return err;
+      return err.message;
+    }
+  }
+
+  deleteReportById(id: string) {
+    try {
+      const reportForDelete = data.reports.find((report) => report.id === id);
+      if (!reportForDelete) {
+        throw new Error(
+          `Can't to delete the report. Report with id:${id} doesn't exist`,
+        );
+      }
+      data.reports = data.reports.filter((report) => report.id !== id);
+      return;
+    } catch (err) {
+      return err.message;
     }
   }
 }

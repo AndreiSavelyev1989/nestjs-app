@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Body,
+  HttpCode,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Report } from './data';
@@ -25,17 +26,25 @@ export class AppController {
   }
 
   @Post()
-  createReport(@Body() body: { source: string; amount: number }, @Param('type') type: string) {
+  createReport(
+    @Body() body: { source: string; amount: number },
+    @Param('type') type: string,
+  ) {
     return this.appService.createReport(body, type);
   }
 
   @Put(':id')
-  updateReportById(@Body() body: any, @Param('id') id: string, @Param('type') type: string) {
+  updateReportById(
+    @Body() body: any,
+    @Param('id') id: string,
+    @Param('type') type: string,
+  ) {
     return this.appService.updateReportById(id, body, type);
   }
 
+  @HttpCode(204)
   @Delete(':id')
-  deleteReportById(@Param() params: any): string {
-    return `Product with id: ${params.id} was deleted!`;
+  deleteReportById(@Param('id') id: string) {
+    return this.appService.deleteReportById(id);
   }
 }
