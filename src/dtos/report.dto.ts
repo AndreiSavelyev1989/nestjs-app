@@ -1,4 +1,10 @@
-import { IsNumber, IsPositive, IsString, IsNotEmpty } from 'class-validator';
+import {
+  IsNumber,
+  IsPositive,
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateReportDto {
   @IsNumber()
@@ -7,5 +13,17 @@ export class CreateReportDto {
 
   @IsString()
   @IsNotEmpty()
+  source: string;
+}
+
+export class UpdateReportDto {
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  amount: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   source: string;
 }

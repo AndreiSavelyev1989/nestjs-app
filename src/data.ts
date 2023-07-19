@@ -4,32 +4,7 @@ export enum ReportType {
 }
 
 export const data: Data = {
-  reports: [
-    {
-      id: 'uuid1',
-      source: 'YouTube',
-      amount: 2500,
-      created_at: new Date(),
-      updated_at: new Date(),
-      type: ReportType.INCOME,
-    },
-    {
-      id: 'uuid2',
-      source: 'LinkedIn',
-      amount: 2500,
-      created_at: new Date(),
-      updated_at: new Date(),
-      type: ReportType.EXPENSE,
-    },
-    {
-      id: 'uuid3',
-      source: 'Twitter',
-      amount: 2500,
-      created_at: new Date(),
-      updated_at: new Date(),
-      type: ReportType.INCOME,
-    },
-  ],
+  reports: [],
 };
 
 interface Data {
