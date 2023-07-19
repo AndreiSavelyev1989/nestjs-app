@@ -4,26 +4,23 @@ import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class AppService {
-  getAllReports(type: string): Report[] {
-    const reportType =
-      type === 'income' ? ReportType.INCOME : ReportType.EXPENSE;
-    const result = data.reports.filter((el) => el.type === reportType);
+  getAllReports(type: ReportType): Report[] {
+    const result = data.reports.filter((el) => el.type === type);
     return result;
   }
 
-  getReportById(id: string, type: string): Report | string {
+  getReportById(id: string, type: ReportType): Report | string {
     const result = data.reports.find((el) => el.id === id && el.type === type);
     return result ? result : 'Not found';
   }
 
-  createReport(body: any, type: string) {
+  createReport(body: { source: string; amount: number }, type: ReportType) {
     try {
       const newReport = {
         id: uuid(),
         created_at: new Date(),
         updated_at: new Date(),
-        type:
-          type === ReportType.INCOME ? ReportType.INCOME : ReportType.EXPENSE,
+        type,
         ...body,
       };
       data.reports.push(newReport);
@@ -33,11 +30,15 @@ export class AppService {
     }
   }
 
-  updateReportById(id: string, body: any, type: string) {
+  updateReportById(
+    id: string,
+    body: { source: string; amount: number },
+    type: ReportType,
+  ) {
     try {
       const updatedReports = data.reports.map((report) =>
         report.id === id && report.type === type
-          ? { ...report, ...body }
+          ? { ...report, ...body, updated_at: new Date() }
           : report,
       );
       data.reports = [...updatedReports];
