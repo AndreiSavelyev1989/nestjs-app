@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   HttpCode,
+  ParseUUIDPipe
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Report, ReportType } from './data';
@@ -23,7 +24,7 @@ export class AppController {
   }
 
   @Get(':id')
-  getReportById(@Param('id') id: string, @Param('type') type: ReportType) {
+  getReportById(@Param('id', ParseUUIDPipe) id: string, @Param('type') type: ReportType) {
     return this.appService.getReportById(id, type);
   }
 
@@ -39,8 +40,8 @@ export class AppController {
 
   @Put(':id')
   updateReportById(
-    @Body() body: any,
-    @Param('id') id: string,
+    @Body() body: { source: string; amount: number },
+    @Param('id', ParseUUIDPipe) id: string,
     @Param('type') type: ReportType,
   ) {
     const reportType =
@@ -50,7 +51,7 @@ export class AppController {
 
   @HttpCode(204)
   @Delete(':id')
-  deleteReportById(@Param('id') id: string) {
+  deleteReportById(@Param('id', ParseUUIDPipe) id: string) {
     return this.appService.deleteReportById(id);
   }
 }
