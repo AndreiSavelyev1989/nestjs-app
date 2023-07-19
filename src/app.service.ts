@@ -1,30 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { Report, ReportType, data } from './data';
+import { ReportType, data } from './data';
 import { v4 as uuid } from 'uuid';
+import { ReportResponseDto } from './dtos/report.dto';
 
 interface CreateReport {
   amount: number;
-  source: string
+  source: string;
 }
 
 interface UpdateReport {
   amount?: number;
-  source?: string
+  source?: string;
 }
 
 @Injectable()
 export class AppService {
-  getAllReports(type: ReportType): Report[] {
-    const result = data.reports.filter((el) => el.type === type);
-    return result;
+  getAllReports(type: ReportType): ReportResponseDto[] {
+    try {
+      return data.reports
+        .filter((el) => el.type === type)
+        .map((report) => new ReportResponseDto(report));
+    } catch (err) {
+      return err.message;
+    }
   }
 
-  getReportById(id: string, type: ReportType): Report | string {
-    const result = data.reports.find((el) => el.id === id && el.type === type);
-    return result ? result : 'Not found';
+  getReportById(id: string, type: ReportType): ReportResponseDto {
+    try {
+      const report = data.reports.find(
+        (el) => el.id === id && el.type === type,
+      );
+      if (!report) {
+        throw new Error(`Report with id: ${id} not found`);
+      }
+      return new ReportResponseDto(report);
+    } catch (err) {
+      return err.message;
+    }
   }
 
-  createReport(body: CreateReport, type: ReportType) {
+  createReport(body: CreateReport, type: ReportType): ReportResponseDto {
     try {
       const newReport = {
         id: uuid(),
@@ -34,7 +49,7 @@ export class AppService {
         ...body,
       };
       data.reports.push(newReport);
-      return newReport;
+      return new ReportResponseDto(newReport);
     } catch (err) {
       return err;
     }
@@ -44,7 +59,7 @@ export class AppService {
     id: string,
     body: UpdateReport,
     type: ReportType,
-  ) {
+  ): ReportResponseDto {
     try {
       const updatedReports = data.reports.map((report) =>
         report.id === id && report.type === type
@@ -59,7 +74,7 @@ export class AppService {
       if (!updatedReport) {
         throw new Error(`The report with id: ${id} doesn't exist`);
       }
-      return updatedReport;
+      return new ReportResponseDto(updatedReport);
     } catch (err) {
       return err.message;
     }
